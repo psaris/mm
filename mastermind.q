@@ -11,7 +11,9 @@ score:{[c;g]("j"$sum e;count[w]-count {x _ x ? y}/[c w;g w:where not e:c=g])} / 
 filt:{[G;s;g]G where s~/:G score\: g}   /(G)uesses, (s)core, (g)uess
 simple:{enlist 1}                       / simple case
 wcase:{x=min x:(max count each) each x} / worst case
-mparts:{x=max x:count each x}           / most parts
+esize:{x=min x:({x wavg x} count each) each x} / expected size
+entropy:{x=min x:({sum p*2 xlog p:x%sum x} count each) each x} / max entropy
+mparts:{x=max x:count each x}                  / most parts
 pick:{[f;S;G]first $[1=count G;G;count G:G inter S@:where f group each S score/:\: G;G;S]}
 play:{[f;c;SGg]$[1=count G:SGg 1;SGg;4 0~sc:score[c;g:SGg 2];SGg;(S _ S?g;G;pick[f;S:SGg 0] G:filt[G;sc;g])]}
 game:{[f;S;g;c]play[f;c] scan (S;S;g)}
@@ -20,9 +22,11 @@ S:perm[4] til count c
 S:cross/[4#enlist til 6]
 show each (count;last) @\:a:game[`wcase;S;0 0 1 1] rand g:S
 score[c:S 40;g:0 1 0 5]
-a:(count game[`wcase;S;0 0 1 1]@) peach S
-a:(count game[`mparts;S;0 0 1 2]@) peach S
 a:(count game[`simple;S;0 0 0 0]@) peach S
+b:(count game[`wcase;S;0 0 1 1]@) peach S
+c:(count game[`esize;S;0 0 1 2]@) peach S
+d:(count game[`entropy;S;0 1 2 3]@) peach S
+e:(count game[`mparts;S;0 0 1 2]@) peach S
 \ts a:(count game[`wcase;S]@) peach 100#S
 last last a:game[`wcase;S;0 0 1 1] 0N! S 10
 last last a:game[`wcase;S;0 0 1 1] 0N!rand S
