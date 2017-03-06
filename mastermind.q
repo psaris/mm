@@ -7,9 +7,12 @@ esize:{x=min x:({x wavg x} count each) each x} / expected size
 entropy:{x=min x:({sum p*2 xlog p:x%sum x} count each) each x} / max entropy
 mparts:{x=max x:count each x}   / most parts
 pick:{[f;S;G]first $[1=count G;G;count G:G inter S@:where f group each S score/:\: G;G;S]}
-turn:{[f;c;SGg]$[4 0~s:score[c;g:SGg 2];SGg;(S _ S?g;G;pick[f;S:SGg 0] G:filt[SGg 1;s;g])]}
+turn:{[f;c;SGg]$[4 0~s:score[c;g:SGg 2];SGg;(S;G;pick[f;S _: (S:SGg 0)?g] G:filt[SGg 1;s;g])]}
 game:{[f;S;g;c]turn[f;c] scan (S;S;g)}
 \
+/ An Optimal Mastermind (4,7) Strategy and More Results in the Expected Case
+/ Geoffroy Ville
+/ https://arxiv.org/pdf/1305.1010
 
 S:cross/[4#enlist til 6]                  / 4x6 Set (w/ repeat)
 a:(count game[`simple;S;0 0 0 0]@) peach S
