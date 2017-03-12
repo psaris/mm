@@ -1,15 +1,15 @@
 perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
-score:{[c;g]                    / (c)ode, (g)uess
+score:{[g;c]                    / (g)uess, (c)ode
  w:where not e:c=g;             / (e)xact
  i:{x _ x ? y}/[c w;g w];       / (i)ncorrect
  ("j"$sum e;count[w]-count i)}
-filt:{[G;s;g]G where s~/:G score\: g} / (G)uesses, (s)core, (g)uess
+filt:{[G;s;g]G where (s~score[g]@) each G} / (G)uesses, (s)core, (g)uess
 pick:{[f;S;G] / (f)unction, (S)et of unused records, logical (G)uesses
  if[1=count G;:first G];        / only 1 left
- if[count G:G inter S@:where f group each S score/:\: G;:first G]; / trim G with f
+ if[count G:G inter S@:where f (group G score\:) each S;:first G]; / trim G with f
  first S} / as a last resort, pick first unused record
 turn:{[f;c;SGg]           / (f)unction, (c)ode, SGg
- if[count[g]=first s:score[c;g:SGg 2];:SGg]; / winning solution
+ if[count[g]=first s:score[g:SGg 2;c];:SGg]; / winning solution
  g:pick[f;S _: (S:SGg 0)?g] G:filt[SGg 1;s;g]; / pick next guess based on score
  (S;G;g)}
 game:{[f;S;g;c]turn[f;c] scan (S;S;g)}
