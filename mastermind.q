@@ -9,7 +9,7 @@ pick:{[f;S;G] / (f)unction, (S)et of unused records, logical (G)uesses
  S@:where f (group G score\:) each S; / filter all unpicked codes for best split
  first $[count G:G inter S;G;S]} / guess a viable solution if possible
 strat:{[f;SGgs] SG,enlist pick[f] . SG:filt . SGgs}
-turn:{[st;c;SGgs] r,enlist score[;c]last r:st SGgs}
+turn:{[st;c;SGgs] SGg,enlist score[;c]last SGg:st SGgs}
 game:{[st;S;g;c](not count[g]=first last@) turn[st;c]\  (S;S;g;score[g;c])}
 summary:{[SGgs]`n`guess`score!(count SGgs 1),-2#SGgs}
 dist:count each group asc@
@@ -20,8 +20,8 @@ msize:{x=min x:(max count each) each x}        / min max size (knuth)
 esize:{x=min x:({x wavg x} count each) each x} / min expected size
 entropy:{x=min x:({sum x*2 xlog x%:sum x} count each) each x} / max entropy
 
-guess:{-1"guess?";read0 0}
-stdin:{[SGgs]show enlist summary SGgs;(filt . SGgs), enlist guess[]}
+guess:{[SG] -1"guess? HINT: ",-3!SG 1;read0 0}
+stdin:{[SGgs]show enlist summary SGgs;SG,enlist guess SG:filt . SGgs}
 
 \
 / An Optimal Mastermind (4,7) Strategy and More Results in the Expected Case
@@ -44,9 +44,9 @@ summary each game[`stdin;S;"0011"] c:"0231"
 
 c:"ROYGPABW"             / Red Orange Yello Green Pink grAy Blue White
 P:flip (where;raze til each)@\: 5 4 3 1 1 / peg combinations
-S:perm[4] c                               / 4x8 Set (no repeat)
-pick[`mparts;S] G:filt[S;"BRAY";1 2]
-pick[`mparts;S] G:filt[G;"ROAB";1 3]
-pick[`mparts;S] G:filt[G;"ORYB";2 1]
-pick[`mparts;S] G:filt[G;"AROB";4 0]
+SG:(S;S:perm[4] c)                        / 4x8 Set (no repeat)
+pick[`mparts] . SG:(filt . SG)["BRAY";1 2]
+pick[`mparts] . SG:(filt . SG)["ROAB";1 3]
+pick[`mparts] . SG:(filt . SG)["ORYB";2 1]
+pick[`mparts] . SG:(filt . SG)["AROB";4 0]
 
