@@ -1,9 +1,7 @@
 perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
-score:{[g;c]                    / (g)uess, (c)ode
- w:where not e:c=g;             / (e)xact
- i:{x _ x ? y}/[c w;g w];       / (i)ncorrect
- ("j"$sum e;count[w]-count i)}
-filt:{[S;G;g;s](S _:S?g;G where (s~score[g]@) each G)} / (S)et (G)uesses, (s)core, (g)uess
+drop:{x _ x ? y}                / drop the first instance of y in x
+score:{[g;c]("j"$sum e;count[w]-count drop/[c w;g w:where not e:c=g])}
+filt:{[S;G;g;s](drop[S;g];G where (s~score[g]@) each G)} / (S)et, (G)uesses, (s)core, (g)uess
 pick:{[f;S;G] / (f)unction, (S)et of unused records, logical (G)uesses
  if[1=count G;:first G];              / only 1 left
  S@:where f (group G score\:) each S; / filter all unpicked codes for best split
