@@ -8,9 +8,9 @@ pick:{[f;S;G] / (f)unction, (S)et of unused records, logical (G)uesses
  if[1=count G;:first G];              / only 1 left
  S@:where f (group G score\:) each S; / filter all unpicked codes for best split
  first $[count G:G inter S;G;S]} / guess a viable solution if possible
-strat:{[f;SGgs] SG,enlist pick[f] . SG:filt . SGgs}
-turn:{[st;c;SGgs] SGg,enlist score[;c]last SGg:st SGgs}
-game:{[st;S;g;c](not count[g]=first last@) turn[st;c]\  (S;S;g;score[g;c])}
+algo:{[f;SGgs] SG,enlist pick[f] . SG:filt . SGgs}
+turn:{[a;c;SGgs] SGg,enlist score[;c]last SGg:a SGgs}
+game:{[a;S;g;c](not count[g]=first last@) turn[a;c]\  (S;S;g;score[g;c])}
 summary:{[SGgs]`n`guess`score!(count SGgs 1),-2#SGgs}
 dist:count each group asc@
 / algorithms
@@ -29,20 +29,20 @@ stdin:{[SGgs]show enlist summary SGgs;SG,enlist guess SG:filt . SGgs}
 / https://arxiv.org/pdf/1305.1010
 
 S:cross/[4#enlist raze string til 6] / 4x6 Set (w/ repeat)
-a:(count game[strat[`simple];S;"0000"]@) peach 50?S
-b:(count game[strat[`msize];S;"0011"]@) peach 50?S
-dist c:(count game[strat[`esize];S;"0012"]@) peach 50?S
-dist d:(count game[strat[`entropy];S;"0123"]@) peach 50?S
-dist e:(count game[strat[`mparts];S;"0012"]@) peach 50?S
-summary each game[strat[`simple];S;"0011"] c:S 10
-summary each game[strat[`msize];S;"0011"] c:S 10
-summary each game[strat[`esize];S;"0011"] c:S 10
-summary each game[strat[`entropy];S;"0011"] c:S 10
-summary each game[strat[`msize];S;"0011"] c:rand S
-summary each game[strat[`msize];S;"0011"] c:"0231"
+a:(count game[algo[`simple];S;"0000"]@) peach 50?S
+b:(count game[algo[`msize];S;"0011"]@) peach 50?S
+dist c:(count game[algo[`esize];S;"0012"]@) peach 50?S
+dist d:(count game[algo[`entropy];S;"0123"]@) peach 50?S
+dist e:(count game[algo[`mparts];S;"0012"]@) peach 50?S
+summary each game[algo[`simple];S;"0011"] c:S 10
+summary each game[algo[`msize];S;"0011"] c:S 10
+summary each game[algo[`esize];S;"0011"] c:S 10
+summary each game[algo[`entropy];S;"0011"] c:S 10
+summary each game[algo[`msize];S;"0011"] c:rand S
+summary each game[algo[`msize];S;"0011"] c:"0231"
 summary each game[`stdin;S;"0011"] c:"0231"
 
-c:"ROYGPABW"             / Red Orange Yello Green Pink grAy Blue White
+c:"ROYGPABW"             / Red Orange Yellow Green Pink grAy Blue White
 P:flip (where;raze til each)@\: 5 4 3 1 1 / peg combinations
 SG:(S;S:perm[4] c)                        / 4x8 Set (no repeat)
 pick[`mparts] . SG:(filt . SG)["BRAY";1 2]
