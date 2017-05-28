@@ -1,51 +1,51 @@
-perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
-drop:{x _ x ? y}                / drop the first instance of y in x
-score:{[c;g]("j"$sum e;count[w]-count drop/[c w;g w:where not e:c=g])}
-dist:{[c;G]group c score/: G}
-/ (S)et, (G)uesses, (s)core, (g)uess
-filt:{[S;G;g;s](drop[S;g];G where s~/:g score/:G)}
-/ (f)unction, (S)et of unused records, logical (G)uesses
-/ filter all unpicked codes (S) for best split
-/ guess a viable solution from (G) if possible
-pick:{[f;S;G]first $[1=count G;G;count G:G inter S@:where f S dist\: G;G;S]}
-algo:{[f;SGgs] SG,enlist pick[f] . SG:filt . SGgs}
-turn:{[a;c;SGgs] SGg,enlist score[c]last SGg:a SGgs}
-game:{[a;S;g;c](not count[g]=first last@) turn[a;c]\ (S;S;g;score[c;g])}
-summary:{[SGgs]`n`guess`score!(count SGgs 1),-2#SGgs}
-hist:count each group asc@
-/ algorithms
-simple:{enlist 1b}                             / simple case
-mparts:{x=max x:count each x}                  / most parts
-msize:{x=min x:(max count each) each x}        / min max size (knuth)
-esize:{x=min x:({x wavg x} count each) each x} / min expected size
-entropy:{x=min x:({sum x*2 xlog x%:sum x} count each) each x} / max entropy
+\l mm.q
+\c 20 200
 
-guess:{[SG] -1"guess? HINT: ",-3!SG 1;read0 0}
-stdin:{[SGgs]show enlist summary SGgs;SG,enlist guess SG:filt . SGgs}
-
-\
 / An Optimal Mastermind (4,7) Strategy and More Results in the Expected Case
 / Geoffroy Ville
 / https://arxiv.org/pdf/1305.1010
 
-S:cross/[4#enlist raze string til 6] / 4x6 Set (w/ repeat)
-a:(count game[algo[`simple];S;"0000"]@) peach 50?S
-b:(count game[algo[`msize];S;"0011"]@) peach 50?S
-hist c:(count game[algo[`esize];S;"0012"]@) peach 50?S
-hist d:(count game[algo[`entropy];S;"0123"]@) peach 50?S
-hist e:(count game[algo[`mparts];S;"0012"]@) peach 50?S
-summary each game[algo[`simple];S;"0011"] c:S 10
-summary each game[algo[`msize];S;"0011"] c:S 10
-summary each game[algo[`esize];S;"0011"] c:S 10
-summary each game[algo[`entropy];S;"0011"] c:S 10
-summary each game[algo[`msize];S;"0011"] c:rand S
-summary each game[algo[`msize];S;"0011"] c:"0231"
-summary each game[`stdin;S;"0011"] c:"0231"
+/ Yet Another Mastermind Strategy
+/ Barteld Kooi
+
+C:`u#(cross/)4 6#6#.Q.n / 4x6 Codes (w/ repeat)
+G:("0000";"0001";"0011";"0012";"0123") / unique first Guesses
+S:flip (where;raze til each)@\: 5 4 3 1 1 / Scores
+/.mm.score:{x[y;z]}C!C!/:C .mm.score/:\: C
+\
+show T:([]score:S)!flip D:(`$G)!@\:[;S](count'') G .mm.dist \: C
+/ simple: start with 0000
+/ worst case: start with 0011
+@[T;1 2#0N;:;] max each D
+/ expected size: start with 0012
+@["f"$T;1 2#0N;:;] D wavg' D
+/ (information theoretic) entropy: start with 0123
+/ not best.  but what if entropy
+/ measure changed base depending on partition size
+@["f"$T;1 2#0N;:;].mm.entropy each D
+/ most parts: start with 0012
+@[T;1 2#0N;:;] sum each 0<D
+
+.mm.hist c:(count .mm.game[.mm.algo[`.mm.esize];C;"0012"]) each C
+.mm.hist b:(count .mm.game[.mm.algo[`.mm.msize];C;"0011"]) each C
+
+a:(count .mm.game[.mm.algo[`.mm.simple];C;"0000"]@) each 50?C
+b:(count .mm.game[.mm.algo[`.mm.msize];C;"0011"]@) each 50?C
+.mm.hist c:(count .mm.game[.mm.algo[`.mm.esize];C;"0012"]@) each 50?C
+.mm.hist d:(count .mm.game[.mm.algo[`.mm.ment];C;"0123"]@) each 50?C
+.mm.hist e:(count .mm.game[.mm.algo[`.mm.mparts];C;"0012"]@) each 50?C
+.mm.summary each .mm.game[.mm.algo[`.mm.simple];C;"0000"] C 10
+.mm.summary each .mm.game[.mm.algo[`.mm.msize];C;"0011"] C 10
+.mm.summary each .mm.game[.mm.algo[`.mm.esize];C;"0012"] C 10
+.mm.summary each .mm.game[.mm.algo[`.mm.ment];C;"0123"] C 10
+.mm.summary each .mm.game[.mm.algo[`.mm.msize];C;"0011"] rand C
+.mm.summary each .mm.game[.mm.algo[`.mm.msize];C;"0011"] "0231"
+.mm.summary each .mm.game[.mm.stdin[`.mm.esize];C;"0011"] rand C
+.mm.summary each .mm.game[.mm.stdin[`.mm.esize];C;"    "] rand C
 
 c:"ROYGPABW"             / Red Orange Yellow Green Pink grAy Blue White
-P:flip (where;raze til each)@\: 5 4 3 1 1 / peg combinations
-SG:(S;S:perm[4] c)                        / 4x8 Set (no repeat)
-pick[`mparts] . SG:(filt . SG)["BRAY";1 2]
-pick[`mparts] . SG:(filt . SG)["ROAB";1 3]
-pick[`mparts] . SG:(filt . SG)["ORYB";2 1]
-pick[`mparts] . SG:(filt . SG)["AROB";4 0]
+CG:(C;C:.mm.perm[4] c)   / 4x8 Codes (no repeat)
+.mm.pick[`.mm.mparts] . CG:(.mm.filt . CG)["BRAY";1 2]
+.mm.pick[`.mm.mparts] . CG:(.mm.filt . CG)["ROAB";1 3]
+.mm.pick[`.mm.mparts] . CG:(.mm.filt . CG)["ORYB";2 1]
+.mm.pick[`.mm.mparts] . CG:(.mm.filt . CG)["AROB";4 0]
