@@ -2,7 +2,7 @@
 cache:()
 perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
 drop:{x _ x ? y}                / drop the first instance of y in x
-score:{[c;g]("j"$sum e;count[w]-count drop/[c w;g w:where not e:c=g])}
+score:{[c;g](e;count[c]-(e:"j"$sum c=g)+count c drop/ g)}
 dist:{[c;G]group c score/: G}
 / unused (C)odes, (G)uesses, (s)core, (g)uess
 filt:{[C;G;g;s](drop[C;g];G where s~/:g score/:G)}
