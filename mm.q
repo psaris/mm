@@ -9,7 +9,7 @@ filt:{[C;G;g;s](drop[C;g];G where s~/:g score/:G)}
 / (f)unction, unused (C)odes, logical (G)uesses
 / filter all unpicked (c)odes for best split
 / guess a viable solution from (G) if possible
-best:{[f;C;G]C idesc (C@:where f C dist\: G) in G}
+best:{[f;C;G]$[3>count G;G;count G:G inter C@: where f C dist\: G;G;C]}
 algo:{[f;CGgs] CG,1#best[f] . CG:filt . CGgs}
 turn:{[a;c;CGgs] CGg,enlist score[c]last CGg:a CGgs}
 game:{[a;C;g;c](not count[g]=first last@) turn[a;c]\ (C;C;g;score[c;g])}
