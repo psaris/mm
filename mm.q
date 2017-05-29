@@ -10,13 +10,14 @@ filt:{[C;G;g;s](drop[C;g];G where s~/:g score/:G)}
 / filter all unpicked (c)odes for best split
 / guess a viable solution from (G) if possible
 best:{[f;C;G]$[3>count G;G;count G:G inter C@: where f C dist\: G;G;C]}
-algo:{[f;CGgs] CG,1#best[f] . CG:filt . CGgs}
 turn:{[a;c;CGgs] CGg,enlist score[c]last CGg:a CGgs}
 game:{[a;C;g;c](not count[g]=first last@) turn[a;c]\ (C;C;g;score[c;g])}
 summary:{[CGgs]`n`guess`score!(count CGgs 1),-2#CGgs}
 hist:count each group asc@
 / algorithms
-simple:{count[x]#1b}                            / simple case
+simple:{[CGgs]CG,1#last CG:filt . CGgs}          / simple case
+/ one step algos
+onestep:{[f;CGgs] CG,1#best[f] . CG:filt . CGgs}
 maxparts:{x=max x:count each x}                 / most parts
 minimax:{x=min x:(max count each) each x}       / min max size (knuth)
 irving:{x=min x:({x wavg x} count each) each x} / min expected size
@@ -24,4 +25,4 @@ entropy:{neg sum x*2 xlog x%:sum x}
 maxent:{x=max x:(entropy count each) each x} / max entropy
 
 guess:{[g] -1"guess? HINT: ",g;read0 0}
-stdin:{[f;CGgs]show enlist summary CGgs;@[algo[f] CGgs;2;guess]}
+stdin:{[a;CGgs]show enlist summary CGgs;@[a CGgs;2;guess]}
