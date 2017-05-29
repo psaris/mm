@@ -17,11 +17,11 @@ summary:{[CGgs]`n`guess`score!(count CGgs 1),-2#CGgs}
 hist:count each group asc@
 / algorithms
 simple:{enlist 1b}                             / simple case
-mparts:{x=max x:count each x}                  / most parts
-msize:{x=min x:(max count each) each x}        / min max size (knuth)
-esize:{x=min x:({x wavg x} count each) each x} / min expected size
+maxparts:{x=max x:count each x}                / most parts
+minimax:{x=min x:(max count each) each x}      / min max size (knuth)
+irving:{x=min x:({x wavg x} count each) each x} / min expected size
 entropy:{neg sum x*2 xlog x%:sum x}
-ment:{x=max x:(entropy count each) each x} / max entropy
+maxent:{x=max x:(entropy count each) each x} / max entropy
 
 guess:{[g] -1"guess? HINT: ",g;read0 0}
 stdin:{[f;CGgs]show enlist summary CGgs;@[algo[f] CGgs;2;guess]}
