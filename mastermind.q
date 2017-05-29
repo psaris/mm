@@ -32,18 +32,16 @@ show T:([]score:S)!flip D:(`$G)!@\:[;S](count'') G .mm.dist \: C
 / most parts: start with 0012
 @[T;1 2#0N;:;] sum each 0<D
 
+.mm.hist a:(count .mm.game[.mm.algo[`.mm.minimax];C;"0011"]@) peach C
+.mm.hist b:(count .mm.game[.mm.algo[`.mm.maxent];C;"0123"]@) peach C
 .mm.hist c:(count .mm.game[.mm.algo[`.mm.irving];C;"0012"]@) peach C
-.mm.hist b:(count .mm.game[.mm.algo[`.mm.minimax];C;"0011"]@) peach C
+.mm.hist d:(count .mm.game[.mm.algo[`.mm.simple];C;"0000"]@) peach C
+.mm.hist e:(count .mm.game[.mm.algo[`.mm.maxparts];C;"0012"]@) peach C
 
-a:(count .mm.game[.mm.algo[`.mm.simple];C;"0000"]@) each 50?C
-b:(count .mm.game[.mm.algo[`.mm.minimax];C;"0011"]@) each 50?C
-.mm.hist c:(count .mm.game[.mm.algo[`.mm.irving];C;"0012"]@) each 50?C
-.mm.hist d:(count .mm.game[.mm.algo[`.mm.maxent];C;"0123"]@) each 50?C
-.mm.hist e:(count .mm.game[.mm.algo[`.mm.maxparts];C;"0012"]@) each 50?C
-.mm.summary each .mm.game[.mm.algo[`.mm.simple];C;"0000"] C 10
-.mm.summary each .mm.game[.mm.algo[`.mm.minimax];C;"0011"] C 10
-.mm.summary each .mm.game[.mm.algo[`.mm.irving];C;"0012"] C 10
-.mm.summary each .mm.game[.mm.algo[`.mm.maxent];C;"0123"] C 10
+.mm.summary each .mm.game[.mm.algo[`.mm.simple];C;"0000"] rand C
+.mm.summary each .mm.game[.mm.algo[`.mm.minimax];C;"0011"] rand C
+.mm.summary each .mm.game[.mm.algo[`.mm.irving];C;"0012"] rand C
+.mm.summary each .mm.game[.mm.algo[`.mm.maxent];C;"0123"] rand C
 .mm.summary each .mm.game[.mm.algo[`.mm.minimax];C;"0011"] rand C
 .mm.summary each .mm.game[.mm.algo[`.mm.minimax];C;"0011"] "0231"
 .mm.summary each .mm.game[.mm.stdin[`.mm.irving];C;"0011"] rand C
