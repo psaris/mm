@@ -16,9 +16,9 @@ game:{[a;C;g;c](not count[g]=first last@) turn[a;c]\ (C;C;g;score[c;g])}
 summary:{[CGgs]`n`guess`score!(count CGgs 1),-2#CGgs}
 hist:count each group asc@
 / algorithms
-simple:{enlist 1b}                             / simple case
-maxparts:{x=max x:count each x}                / most parts
-minimax:{x=min x:(max count each) each x}      / min max size (knuth)
+simple:{count[x]#1b}                            / simple case
+maxparts:{x=max x:count each x}                 / most parts
+minimax:{x=min x:(max count each) each x}       / min max size (knuth)
 irving:{x=min x:({x wavg x} count each) each x} / min expected size
 entropy:{neg sum x*2 xlog x%:sum x}
 maxent:{x=max x:(entropy count each) each x} / max entropy
