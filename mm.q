@@ -1,8 +1,7 @@
 \d .mm
-cache:()
 perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
 drop:{x _ x ? y}                / drop the first instance of y in x
-score:{[c;g](e;count[c]-(e:"j"$sum c=g)+count c drop/ g)}
+score:{[c;g]e,count[c]-(e:"j"$sum c=g)+count c drop/ g}
 dist:{[c;G]group c score/: G}
 / unused (C)odes, (G)uesses, (s)core, (g)uess
 filt:{[C;G;g;s](drop[C;g];G where s~/:g score/:G)}
@@ -23,6 +22,6 @@ minimax:{x=min x:(max count each) each x}       / min max size (knuth)
 irving:{x=min x:({x wavg x} count each) each x} / min expected size
 entropy:{neg sum x*2 xlog x%:sum x}
 maxent:{x=max x:(entropy count each) each x} / max entropy
-
+/ interactive
 guess:{[g] -1"guess? HINT: ",g;read0 0}
 stdin:{[a;CGgs]show enlist summary CGgs;@[a CGgs;2;guess]}
