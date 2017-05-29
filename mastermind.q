@@ -14,41 +14,40 @@
 / Defeating Mastermind
 / By Justin Dowell
 
-C:`u#(cross/)4 6#6#.Q.n / 4x6 Codes (w/ repeat)
-G:("0000";"0001";"0011";"0012";"0123") / unique first Guesses
-S:flip (where;raze til each)@\: 5 4 3 1 1 / Scores
+C:`u#(cross/)4 6#6#.Q.n / 4x6 (C)odes (w/ repeat)
+G:("0000";"0001";"0011";"0012";"0123") / unique first (G)uesses
+S:flip (where;raze til each)@\: 5 4 3 1 1 / (S)cores
 /.mm.score:{x[y;z]}C!C!/:C .mm.score/:\: C
 \
-show T:([]score:S)!flip D:(`$G)!@\:[;S](count'') G .mm.dist \: C
+show T:([]score:S)!flip (`$G)!(count'')(G .mm.dist\: C)@\:S
 / simple: start with 0000
-/ worst case: start with 0011
-@[T;1 2#0N;:;] max each D
+/ minimiax: start with 0011
+T upsert (1 2#0N),value max T
 / expected size: start with 0012
-@["f"$T;1 2#0N;:;] D wavg' D
+("f"$T) upsert (1 2#0N),value T wavg T
 / (information theoretic) entropy: start with 0123
-/ not best.  but what if entropy
-/ measure changed base depending on partition size
-@["f"$T;1 2#0N;:;].mm.entropy each D
+("f"$T) upsert (1 2#0N),value .mm.entropy each flip value T
 / most parts: start with 0012
-@[T;1 2#0N;:;] sum each 0<D
+T upsert (1 2#0N),value sum 0<T
 
 .mm.hist d:(count .mm.game[.mm.simple;C;"0000"]@) peach C
 .mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"0011"]@) peach C
-.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"0123"]@) peach C
 .mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"0012"]@) peach C
+.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"0123"]@) peach C
 .mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"0012"]@) peach C
 
-.mm.summary each .mm.game[.mm.onestep[`.mm.simple];C;"0000"] rand C
+.mm.summary each .mm.game[.mm.simple;C;"0000"] rand C
 .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"0011"] rand C
 .mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;"0012"] rand C
 .mm.summary each .mm.game[.mm.onestep[`.mm.maxent];C;"0123"] rand C
-.mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"0011"] rand C
-.mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"0011"] "0231"
-.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.irving]];C;"0011"] rand C
-.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.minimax]];C;"    "] rand C
+.mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"0012"] rand C
+
+.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.minimax]];C;"0011"] rand C
+.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxparts]];C;"    "] rand C
 .mm.summary each .mm.game[.mm.stdin[.mm.simple];C;"    "] rand C
 
 c:"ROYGPABW"             / Red Orange Yellow Green Pink grAy Blue White
+perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
 CG:(C;C:.mm.perm[4] c)   / 4x8 Codes (no repeat)
 .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"BRAY"] "AROB"
 .mm.best[`.mm.maxparts] . CG:(.mm.filt . CG)["BRAY";1 2]
