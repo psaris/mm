@@ -3,16 +3,16 @@
 drop:{x _ x ? y}
 / (c)ode, (g)uess
 score:{[c;g]e,count[c]-(e:"j"$sum c=g)+count c drop/ g}
-/ unused (C)odes, valid (G)uesses, next (g)uess, (s)core
+/ unused (C)odes, viable (G)uesses, next (g)uess, (s)core
 filt:{[C;G;g;s](drop[C;g];G where s~/:g score/:G)}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
 
 / one step algos
-/ filter all unpicked (c)odes for best split
-/ guess a viable solution from (G) if possible
 dist:{[c;G]group c score/: G}
+/ use (f)unction to filter all unpicked (C)odes for best split. pick a
+/ viable solution from viable (G)uesses if possible
 best:{[f;C;G]$[3>count G;G;count G:G inter C@: where f C dist\: G;G;C]}
 onestep:{[f;CGgs] CG,1#best[f] . CG:filt . CGgs}
 minimax:{x=min x:(max count each) each x}       / min max size (knuth)
