@@ -2,18 +2,19 @@
 / drop the first instance of y in x
 drop:{x _ x ? y}
 / (c)ode, (g)uess
-score:{[c;g]e,count[c]-(e:"j"$sum c=g)+count c drop/ g}
+score:{e,count[x]-(e:"j"$sum x=y)+count x drop/ y}
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
-filt:{[C;G;g;s](drop[C;g];G where s~/:g score/:G)}
+filt:{[C;G;g;s](drop[C;g];G where (s~score[g]@) each G)}
+/ group the score of y against each x
+dist:{group x score\: y}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
 
 / one step algos
-dist:{[c;G]group c score/: G}
 / use (f)unction to filter all unpicked (C)odes for best split. pick a
 / viable solution from viable (G)uesses if possible
-best:{[f;C;G]first $[3>count G;G;count G:G inter C@: where f C dist\: G;G;C]}
+best:{[f;C;G]first $[3>count G;G;count G:G inter C@: where f G dist/: C;G;C]}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
 minimax:{x=min x:(max count each) each x}       / min max size (knuth)
 irving:{x=min x:({x wavg x} count each) each x} / min expected size
