@@ -1,5 +1,4 @@
 \l mm.q
-\c 20 200
 
 / An Optimal Mastermind (4,7) Strategy and More Results in the Expected Case
 / by Geoffroy Ville
@@ -16,6 +15,7 @@
 / https://rkoutnik.com/Mastermind/
 
 / http://colorcode.laebisch.com/links/Donald.E.Knuth.pdf
+/ http://colorcode.laebisch.com/
 
 C:`u#.mm.perm[4] 6#.Q.n / 4x6 (C)odes (w repeat)
 G:("0000";"0001";"0011";"0012";"0123") / unique first (G)uesses
