@@ -28,7 +28,7 @@ stdin:{[a;CGgs]show enlist summary CGgs;@[a CGgs;2;guess]}
 / play
 perm:{$[x>0;(cross/)x#enlist y;{raze x{x,/:y except x}\:y}[;y]/[-1-x;y]]}
 turn:{[a;c;CGgs] CGg,enlist score[c]last CGg:a CGgs}
-fgame:{[a;C;g;c](not count[g]=first last@) turn[a;c]\ (C;C;g;score[c;g])}
+game:{[a;C;g;c](not count[g]=first last@) turn[a;c]\ (C;C;g;score[c;g])}
 
 / report
 summary:{[CGgs]`n`guess`score!(count CGgs 1),-2#CGgs}
