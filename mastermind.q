@@ -2,19 +2,22 @@
 \c 20 200
 
 / An Optimal Mastermind (4,7) Strategy and More Results in the Expected Case
-/ Geoffroy Ville
+/ by Geoffroy Ville
 / https://arxiv.org/pdf/1305.1010
 
 / Yet Another Mastermind Strategy
-/ Barteld Kooi
+/ by Barteld Kooi
+/ www.philos.rug.nl/~barteld/master.pdf
 
 / Mastermind
-/ Tom Davis
+/ by Tom Davis
+/ www.geometer.org/mathcircles/mastermind.pdf
 
-/ Defeating Mastermind
-/ By Justin Dowell
+/ https://rkoutnik.com/Mastermind/
 
-C:`u#(cross/)4 6#6#.Q.n / 4x6 (C)odes (w/ repeat)
+/ http://colorcode.laebisch.com/links/Donald.E.Knuth.pdf
+
+C:`u#.mm.perm[4] 6#.Q.n / 4x6 (C)odes (w repeat)
 G:("0000";"0001";"0011";"0012";"0123") / unique first (G)uesses
 S:flip (where;raze til each)@\: 5 4 3 1 1 / (S)cores
 /.mm.score:{x[y;z]}C!C!/:C .mm.score/:\: C
@@ -47,10 +50,19 @@ T upsert (1 2#0N),value sum 0<T
 .mm.summary each .mm.game[.mm.stdin[.mm.simple];C;"    "] rand C
 
 c:"ROYGPABW"             / Red Orange Yellow Green Pink grAy Blue White
-perm:{{raze x{x,/:y except x}\:y}[;y]/[x-1;y]}
-CG:(C;C:.mm.perm[4] c)   / 4x8 Codes (no repeat)
+CG:(C;C:.mm.perm[-4] c)   / 4x8 Codes (no repeat)
+f:.mm.best[`.mm.maxparts]
 .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"BRAY"] "AROB"
-.mm.best[`.mm.maxparts] . CG:(.mm.filt . CG)["BRAY";1 2]
-.mm.best[`.mm.maxparts] . CG:(.mm.filt . CG)["ROAB";1 3]
-.mm.best[`.mm.maxparts] . CG:(.mm.filt . CG)["ORYB";2 1]
-.mm.best[`.mm.maxparts] . CG:(.mm.filt . CG)["AROB";4 0]
+f . CG:(.mm.filt . CG)["BRAY";1 2]
+f . CG:(.mm.filt . CG)["ROAB";1 3]
+f . CG:(.mm.filt . CG)["ORYB";2 1]
+f . CG:(.mm.filt . CG)["AROB";4 0]
+
+c:"GBWURY"             / Green Black White blUe Red Yellow
+CG:(C;C:`u#.mm.perm[4] c)
+f . CG:(.mm.filt . CG)["    ";0 0]
+f . CG:(.mm.filt . CG)["GGBW";0 1]
+f . CG:(.mm.filt . CG)["BUUR";1 2]
+f . CG:(.mm.filt . CG)["BRYU";1 1]
+f . CG:(.mm.filt . CG)["WURU";1 1]
+f . CG:(.mm.filt . CG)["UBUU";4 0]
