@@ -20,9 +20,9 @@
 C:`u#.mm.perm[4] 6#.Q.n / 4x6 (C)odes (w repeat)
 G:("0000";"0001";"0011";"0012";"0123") / unique first (G)uesses
 S:flip (where;raze til each)@\: 5 4 3 1 1 / (S)cores
-/.mm.score:{x[y;z]}C!C!/:C .mm.score/:\: C
+/.mm.score:C!C!/:.mm.score[C;C]
 \
-show T:([]score:S)!flip (`$G)!(count'')(G .mm.dist\: C)@\:S
+show T:([]score:S)!flip (@[;S](count') .mm.dist[C]@) each (`$G)!G
 / simple: start with 0000
 / minimiax: start with 0011
 T upsert (1 2#0N),value max T
@@ -66,3 +66,6 @@ f . CG:(.mm.filt . CG)["BUUR";1 2]
 f . CG:(.mm.filt . CG)["BRYU";1 1]
 f . CG:(.mm.filt . CG)["WURU";1 1]
 f . CG:(.mm.filt . CG)["UBUU";4 0]
+
+C:.mm.perm[4] 6#.Q.n
+.mm.summary each .mm.game[.mm.onestep[.mm.maxparts];C;"0012"] rand C

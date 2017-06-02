@@ -2,11 +2,15 @@
 / drop the first instance of y in x
 drop:{x _ x ? y}
 / (c)ode, (g)uess
-score:{e,count[x]-(e:"j"$sum x=y)+count x drop/ y}
+score:{
+ if[not type x;:x .z.s\: y];
+ if[not type y;:x .z.s/: y];
+ x:e,count[x]-(e:"j"$sum x=y)+count x drop/ y;
+ x}
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
-filt:{[C;G;g;s](drop[C;g];G where (s~score[g]@) each G)}
+filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
 / group the score of y against each x
-dist:{group x score\: y}
+dist:{group score[x;y]}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
