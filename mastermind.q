@@ -22,7 +22,7 @@ G:("0000";"0001";"0011";"0012";"0123") / unique first (G)uesses
 S:flip (where;raze til each)@\: 5 4 3 1 1 / (S)cores
 /.mm.score:C!C!/:.mm.score[C;C]
 \
-show T:([]score:S)!flip (@[;S](count') .mm.dist[C]@) each (`$G)!G
+show T:([]score:S)!flip (@[;S] .mm.dist[C]@) each (`$G)!G
 / simple: start with 0000
 / minimiax: start with 0011
 T upsert (1 2#0N),value max T

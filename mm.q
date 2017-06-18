@@ -1,7 +1,7 @@
 \d .mm
 / drop the first instance of y in x
 drop:{x _ x ? y}
-/ (c)ode, (g)uess
+/ x,y = score,guess in any order
 score:{
  if[not type x;:x .z.s\: y];
  if[not type y;:x .z.s/: y];
@@ -10,7 +10,7 @@ score:{
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
 filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
 / group the score of y against each x
-dist:{group score[x;y]}
+dist:{count each group score[x;y]}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
@@ -20,11 +20,11 @@ simple:{[CGgs]CG,1#last CG:filt . CGgs}
 / viable solution from viable (G)uesses if possible
 best:{[f;C;G]first $[3>count G;G;count G:G inter C@: where f G dist/: C;G;C]}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
-minimax:{x=min x:(max count each) each x}       / min max size (knuth)
-irving:{x=min x:({x wavg x} count each) each x} / min expected size
+minimax:{x=min x:max each x}       / min max size (knuth)
+irving:{x=min x:{x wavg x} each x} / min expected size
 entropy:{neg sum x*2 xlog x%:sum x}
-maxent:{x=max x:(entropy count each) each x} / max entropy
-maxparts:{x=max x:count each x}              / most parts
+maxent:{x=max x:entropy each x} / max entropy
+maxparts:{x=max x:count each x} / most parts
 
 / interactive
 guess:{[g] -1"guess? HINT: ",g;read0 0}
