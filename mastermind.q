@@ -17,55 +17,77 @@
 / http://colorcode.laebisch.com/links/Donald.E.Knuth.pdf
 / http://colorcode.laebisch.com/
 
-C:`u#.mm.perm[4] 6#.Q.n / 4x6 (C)odes (w repeat)
-G:("0000";"0001";"0011";"0012";"0123") / unique first (G)uesses
-S:flip (where;raze til each)@\: 5 4 3 1 1 / (S)cores
-/.mm.score:C!C!/:.mm.score[C;C]
-\
+-1 "generate a complete list of patterns";
+count C:`u#.mm.perm[4] 6#.Q.n / 4x6 (C)odes (w repeat)
+-1 "generate the list of unique first (G)uesses";
+show G:("0000";"0001";"0011";"0012";"0123")
+-1 "generate the list of unique (S)cores";
+show S:flip (where;raze til each)@\: 5 4 3 1 1
+-1 "given the distribution of first guesses, which should we pick?";
 show T:([]score:S)!flip (@[;S] .mm.dist[C]@) each (`$G)!G
-/ simple: start with 0000
-/ minimiax: start with 0011
-T upsert (1 2#0N),value max T
-/ expected size: start with 0012
-("f"$T) upsert (1 2#0N),value T wavg T
-/ (information theoretic) entropy: start with 0123
-("f"$T) upsert (1 2#0N),value .mm.entropy each flip value T
-/ most parts: start with 0012
-T upsert (1 2#0N),value sum 0<T
+-1 "we can start simple. pick the next logic code: 0000";
+-1 "or we can pick the code that minimizes the maximum remaining codes: 0011";
+show T upsert (1 2#0N),value max T
+-1 "or we can pick the code that minimizes the expected remaining codes: 0012";
+show ("f"$T) upsert (1 2#0N),value T wavg T
+-1 "or we can pick the code the maximizes the entropy: 0123"; / information theoretic
+show ("f"$T) upsert (1 2#0N),value .mm.entropy each flip value T
+-1 "or why not pick a code that results in a distribution with the most parts: 0012";
+show T upsert (1 2#0N),value sum 0<T
 
+-1 "lets play a single game for each strategy";
+-1 "simple";
+show .mm.summary each .mm.game[.mm.simple;C;"0000"] rand C
+-1 "minimax (knuth: always wins in 5 or less guess)";
+show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"0011"] rand C
+-1 "irving (min expectation)";
+show .mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;"0012"] rand C
+-1 "maximum entropy (information theoretic)";
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxent];C;"0123"] rand C
+-1 "maximum parts (the smallest expected number of guesses)";
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"0012"] rand C
+
+-1 "master mind comes in other variations - including one with 8 colors";
+-1 "to narrow the universe of solutions, it does not allow repeats";
+-1 "we also can generate this universe with .mm.perm";
+-1 "like the ? operator, passing a negative operand prevents repeats";
+
+/ grAy Blue Green Orange Pink Red White Yellow
+count C:.mm.perm[-4] "ABGOPRWY"  / 4x8 Codes (no repeat)
+-1 "now lets assume we don't know the code, but would like help on choosing codes";
+-1 "we first generate 'CG': the list of unused Codes, and valid Guesses";
+CG:(C;C)
+-1 "next we define our algorithm and use .mm.best to suggest the next code";
+f:.mm.best[`.mm.maxparts]
+-1 "with no repeats, there is no 'best' first guess";
+-1 "we pick: ABGO, and pass the code maker's response";
+f . CG:(.mm.filt . CG)["ABGO";1 2]
+f . CG:(.mm.filt . CG)["AGBP";1 1]
+f . CG:(.mm.filt . CG)["AORB";2 2]
+f . CG:(.mm.filt . CG)["AROB";4 0]
+-1 "solution in 4 guesses!";
+-1 "replay the optimal game";
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"ABGO"] "AROB"
+-1 "lets play a game against the computer!";
+.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;"ABGO"] rand C
+
+\
+/ convert .mm.score into a cache
+/.mm.score:C!C!/:.mm.score[C;C]
+G:10#C
+.mm.scoretable:{[S;C;G]([]score:S)!flip (@[;S] .mm.dist[C]@) each (`$G)!G}
+show .mm.scoretable[S] . reverse CG
+
+/ generate a histogram of guess counts for each strategy
 .mm.hist d:(count .mm.game[.mm.simple;C;"0000"]@) peach C
 .mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"0011"]@) peach C
 .mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"0012"]@) peach C
 .mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"0123"]@) peach C
 .mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"0012"]@) peach C
 
-.mm.summary each .mm.game[.mm.simple;C;"0000"] rand C
-.mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"0011"] rand C
-.mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;"0012"] rand C
-.mm.summary each .mm.game[.mm.onestep[`.mm.maxent];C;"0123"] rand C
-.mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"0012"] rand C
-
-.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.minimax]];C;"0011"] rand C
-.mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxparts]];C;"    "] rand C
-.mm.summary each .mm.game[.mm.stdin[.mm.simple];C;"    "] rand C
-
-c:"ROYGPABW"             / Red Orange Yellow Green Pink grAy Blue White
-CG:(C;C:.mm.perm[-4] c)   / 4x8 Codes (no repeat)
-f:.mm.best[`.mm.maxparts]
-.mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"BRAY"] "AROB"
-f . CG:(.mm.filt . CG)["BRAY";1 2]
-f . CG:(.mm.filt . CG)["ROAB";1 3]
-f . CG:(.mm.filt . CG)["ORYB";2 1]
-f . CG:(.mm.filt . CG)["AROB";4 0]
-
-c:"GBWURY"             / Green Black White blUe Red Yellow
-CG:(C;C:`u#.mm.perm[4] c)
-f . CG:(.mm.filt . CG)["    ";0 0]
-f . CG:(.mm.filt . CG)["GGBW";0 1]
-f . CG:(.mm.filt . CG)["BUUR";1 2]
-f . CG:(.mm.filt . CG)["BRYU";1 1]
-f . CG:(.mm.filt . CG)["WURU";1 1]
-f . CG:(.mm.filt . CG)["UBUU";4 0]
-
-C:.mm.perm[4] 6#.Q.n
-.mm.summary each .mm.game[.mm.onestep[.mm.maxparts];C;"0012"] rand C
+count C:.mm.perm[-3] "ABGOPRWY"  / 4x8 Codes (no repeat)
+.mm.hist (count .mm.game[.mm.simple;C;"ABG"]@) each C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABG"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABG"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABG"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABG"]@) peach C
