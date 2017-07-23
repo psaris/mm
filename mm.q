@@ -18,7 +18,7 @@ simple:{[CGgs]CG,1#last CG:filt . CGgs}
 / one step algos
 / use (f)unction to filter all unpicked (C)odes for best split. pick a
 / viable solution from viable (G)uesses if possible
-best:{[f;C;G]first $[3>count G;G;count G:G inter C@: where f G (')[dist;score]/: C;G;C]}
+best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f (dist score[G]@]'[C];G;C]}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
 minimax:{x=min x:max each x}       / min max size (knuth)
 irving:{x=min x:{x wavg x} each x} / min expected size
