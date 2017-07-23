@@ -18,7 +18,7 @@ simple:{[CGgs]CG,1#last CG:filt . CGgs}
 
 / one step algos
 / use (f)unction to filter all unpicked (C)odes for best split
-/ pick a solution from viable (G)uesses if possible
+/ pick a solution from viable (G)uesses (if possible)
 best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f freq each score[C;G];G;C]}
 entropy:{neg sum x*2 xlog x%:sum x}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
@@ -28,7 +28,7 @@ maxent:{x=max x:entropy each x}    / max entropy
 maxparts:{x=max x:count each x}    / most parts
 
 / interactive
-guess:{[g] 1"guess (HINT: ",g,"): ";read0 0}
+guess:{[g] 1"guess (HINT ",g,"): ";read0 0}
 stdin:{[a;CGgs]show enlist summary CGgs;@[a CGgs;2;guess]}
 
 / play
