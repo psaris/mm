@@ -10,7 +10,8 @@ score:{
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
 filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
 / frequency distribution
-freq:{count each group x}
+freq:count each group@
+hist:freq asc@
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
@@ -37,4 +38,3 @@ game:{[a;C;g;c](not count[g]=first last@) turn[a;c]\ (C;C;g;score[c;g])}
 
 / report
 summary:{[CGgs]`n`guess`score!(count CGgs 1),-2#CGgs}
-hist:count each group asc@
