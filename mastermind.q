@@ -24,7 +24,7 @@ show G:("0000";"0001";"0011";"0012";"0123")
 -1 "generate the list of unique (S)cores";
 show S:flip (where;raze til each)@\: 5 4 3 1 1
 -1 "given the frequency distribution of first guesses, which should we pick?";
-show T:([]score:S)!flip (get S#.mm.freq .mm.score[C]@) each (`$G)!G
+show T:([]score:S)!flip (`$G)!(value S#.mm.freq .mm.score[C]@) each G
 -1 "we can start simple. pick the next logic code: 0000";
 -1 "or we can pick the code that minimizes the maximum remaining codes: 0011";
 show T upsert (1 2#0N),value max T
