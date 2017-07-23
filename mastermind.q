@@ -23,8 +23,8 @@ count C:`u#.mm.perm[4] 6#.Q.n / 4x6 (C)odes (w repeat)
 show G:("0000";"0001";"0011";"0012";"0123")
 -1 "generate the list of unique (S)cores";
 show S:flip (where;raze til each)@\: 5 4 3 1 1
--1 "given the distribution of first guesses, which should we pick?";
-show T:([]score:S)!flip (@[;S] .mm.dist .mm.score[C]@) each (`$G)!G
+-1 "given the frequency distribution of first guesses, which should we pick?";
+show T:([]score:S)!flip (get S#.mm.freq .mm.score[C]@) each (`$G)!G
 -1 "we can start simple. pick the next logic code: 0000";
 -1 "or we can pick the code that minimizes the maximum remaining codes: 0011";
 show T upsert (1 2#0N),value max T
@@ -75,7 +75,7 @@ show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"ABGO"] "AROB"
 / convert .mm.score into a cache
 /.mm.score:C!C!/:.mm.score[C;C]
 CG:enlist[C],enlist G:10#C
-.mm.scoretable:{[S;C;G]([]score:S)!flip (@[;S] .mm.dist .mm.score[C]@) each (`$G)!G}
+.mm.scoretable:{[S;C;G]([]score:S)!flip (@[;S] .mm.freq .mm.score[C]@) each (`$G)!G}
 show .mm.scoretable[S] . reverse CG
 
 / generate a histogram of guess counts for each strategy
