@@ -28,7 +28,7 @@ maxent:{x=max x:entropy each x} / max entropy
 maxparts:{x=max x:count each x} / most parts
 
 / interactive
-guess:{[g] -1"guess? HINT: ",g;read0 0}
+guess:{[g] 1"guess (HINT: ",g,"): ";read0 0}
 stdin:{[a;CGgs]show enlist summary CGgs;@[a CGgs;2;guess]}
 
 / play
