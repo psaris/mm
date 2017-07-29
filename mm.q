@@ -1,9 +1,11 @@
 \d .mm
 / drop the first instance of y in x
 drop:{x _ x ? y}
+/ vectorize an atomic function
+veca:{[f;x;y]$[type x;$[type y;f[x;y];x f/: y];type y;x f\: y;x f/:\: y]}
 / x,y = score,guess in any order
 scr:{(e;count[x]-(e:"j"$sum x=y)+count x drop/ y)}
-score:{$[type x;$[type y;scr[x;y];x scr/: y];type y;x scr\: y;x scr/:\: y]}
+score:veca scr
 
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
 filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
