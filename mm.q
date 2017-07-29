@@ -2,11 +2,9 @@
 / drop the first instance of y in x
 drop:{x _ x ? y}
 / x,y = score,guess in any order
-score:{
- if[not type x;:x .z.s\: y];
- if[not type y;:x .z.s/: y];
- x:e,count[x]-(e:"j"$sum x=y)+count x drop/ y;
- x}
+scr:{(e;count[x]-(e:"j"$sum x=y)+count x drop/ y)}
+score:{$[type x;$[type y;scr[x;y];x scr/: y];type y;x scr\: y;x scr/:\: y]}
+
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
 filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
 / frequency distribution
