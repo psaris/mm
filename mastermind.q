@@ -80,15 +80,15 @@ CG:enlist[C],enlist G:10#C
 show .mm.scoretable[S] .  CG
 
 / generate a histogram of guess counts for each strategy
-.mm.hist d:(count .mm.game[.mm.simple;C;"1111"]@) peach C
-.mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) peach C
-.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"1123"]@) peach C
-.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) peach C
-.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"]@) peach C
+.mm.hist d:(count .mm.game[.mm.simple;C;"1111"]@) each C
+.mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) each C
+.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"1123"]@) each C
+.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) each C
+.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"]@) each C
 
 count C:.mm.perm[-3] "ABGOPRWY"  / 4x8 Codes (no repeat)
 .mm.hist (count .mm.game[.mm.simple;C;"ABG"]@) each C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABG"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABG"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABG"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABG"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABG"]@) each C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABG"]@) each C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABG"]@) each C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABG"]@) each C
