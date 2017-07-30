@@ -24,7 +24,7 @@ show G:("1111";"1112";"1122";"1123";"1234")
 -1 "generate the list of unique scores";
 show flip (where;raze til each)@\: 5 4 3 1 1
 -1 "given the frequency distribution of first guesses, which should we pick?";
-show T:.mm.scoredist[C;G]
+show T:`score  xcol .mm.freqdist[`$G] .mm.score[G;C]
 -1 "we can start simple. pick the next logic code: 1111";
 -1 "or we can pick the code that minimizes the maximum remaining codes: 1122";
 show T upsert (1 2#0N),value max T
@@ -76,19 +76,22 @@ show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;"ABGO"] ran
 .mm.score:C!C!/:C .mm.scr\:/: C
 
 / generate a histogram of guess counts for each strategy
-.mm.hist d:(count .mm.game[.mm.simple;C;"1111"]@) peach C
-.mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) peach C
+.mm.hist a:(count .mm.game[.mm.simple;C;"1111"]@) peach C
+.mm.hist b:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) peach C
 .mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"1123"]@) peach C
-.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) peach C
+.mm.hist d:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) peach C
 .mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"]@) peach C
+show D:`turns xcol .mm.freqdist[`simple`minimax`irving`maxent`maxparts] (a;b;c;d;e)
+show ("f"$D) upsert 0N,value[flip value D] wavg\: key[D]`turns
+
 
 count C:`u#.mm.perm[-4] "ABGOPRWY"  / 4x8 Codes (no repeat)
 CG:enlist[C],enlist G:10?C
 .mm.score:C!C!/:C .mm.scr\:/: C
 / all first guesses are the same
-show .mm.scoredist .  CG
+show `score xcol .mm.freqdist[`$G] .mm.score[G;C]
 .mm.hist (count .mm.game[.mm.simple;C;"ABGO"]@) peach C
 .mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABGO"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABGO"]@) peach C
 .mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABGO"]@) peach C
 .mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABGO"]@) peach C
