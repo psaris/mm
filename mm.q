@@ -13,8 +13,8 @@ filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
 freq:count each group@
 hist:freq asc@
 
-/ distribution of scores over all (C)odes for each (G)uess
-scoredist:{[C;G]([]score:s)!flip(`$G)!freq'[S]@\:s:asc distinct raze S:score[G;C]}
+/ compute the frequency distribution of x with (c)olumn names
+freqdist:{[c;x]([]x:u)!flip c!freq'[x]@\:u:asc distinct raze x}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
