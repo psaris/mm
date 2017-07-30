@@ -13,6 +13,9 @@ filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
 freq:count each group@
 hist:freq asc@
 
+/ distribution of (S)cores over all (C)odes for each (G)uess
+scoredist:{[S;C;G]([]score:S)!flip (`$G)!(freq each score[G;C])@\:S}
+
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
 
