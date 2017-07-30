@@ -24,7 +24,7 @@ show G:("1111";"1112";"1122";"1123";"1234")
 -1 "generate the list of unique (S)cores";
 show S:flip (where;raze til each)@\: 5 4 3 1 1
 -1 "given the frequency distribution of first guesses, which should we pick?";
-show T:([]score:S)!flip (`$G)!(.mm.freq each .mm.score[G;C])@\:S
+show T:.mm.scoredist[S;C;G]
 -1 "we can start simple. pick the next logic code: 1111";
 -1 "or we can pick the code that minimizes the maximum remaining codes: 1122";
 show T upsert (1 2#0N),value max T
@@ -38,7 +38,7 @@ show T upsert (1 2#0N),value sum 0<T
 -1 "lets play a single game for each strategy";
 -1 "simple";
 show .mm.summary each .mm.game[.mm.simple;C;"1111"] rand C
--1 "minimax (knuth: always wins in 5 or less guess)";
+-1 "minimax (knuth: always wins in 5 or less guesses)";
 show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"1122"] rand C
 -1 "irving (min expectation)";
 show .mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;"1123"] rand C
@@ -73,22 +73,22 @@ show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;"ABGO"] ran
 
 \
 / convert .mm.score into a cache
-/.mm.score:C!C!/:.mm.score[C;C]
-/.mm.score:C!C!/:C .mm.score\:/: C
-CG:enlist[C],enlist G:10#C
-.mm.scoretable:{[S;C;G]([]score:S)!flip (`$G)!(.mm.freq each .mm.score[G;C])@\:S}
-show .mm.scoretable[S] .  CG
+.mm.score:C!C!/:C .mm.scr\:/: C
 
 / generate a histogram of guess counts for each strategy
-.mm.hist d:(count .mm.game[.mm.simple;C;"1111"]@) each C
-.mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) each C
-.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"1123"]@) each C
-.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) each C
-.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"]@) each C
+.mm.hist d:(count .mm.game[.mm.simple;C;"1111"]@) peach C
+.mm.hist a:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) peach C
+.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"1123"]@) peach C
+.mm.hist b:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) peach C
+.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"]@) peach C
 
-count C:.mm.perm[-3] "ABGOPRWY"  / 4x8 Codes (no repeat)
-.mm.hist (count .mm.game[.mm.simple;C;"ABG"]@) each C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABG"]@) each C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABG"]@) each C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABG"]@) each C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABG"]@) each C
+count C:`u#.mm.perm[-4] "ABGOPRWY"  / 4x8 Codes (no repeat)
+CG:enlist[C],enlist G:10?C
+.mm.score:C!C!/:C .mm.scr\:/: C
+/ all first guesses are the same
+show .mm.scoredist[S] .  CG
+.mm.hist (count .mm.game[.mm.simple;C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABGO"]@) peach C
