@@ -27,8 +27,8 @@ q)count C:`u#.mm.perm[4] "123456"
 ## Algorithm Selection
 
 We can then choose an algorithm (say Knuth's minimax algorithm that is
-guaranteed to win in 5 moves) and and an initial guess "1122", and we
-can see how the algorithm performs:
+guaranteed to win in 5 moves) and an initial guess "1122", and we can
+see how the algorithm performs:
 
 ```
 q)show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"1122"] rand C
