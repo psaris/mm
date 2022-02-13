@@ -2,7 +2,7 @@
 / drop the first instance of y in x
 drop:{x _ x ? y}
 / vectorize an atomic function
-veca:{[f;x;y]$[type x;$[type y;f[x;y];x f/: y];type y;x f\: y;x f/:\: y]}
+veca:{[f;x;y]$[type x;$[type y;f[x;y];f[x] peach y];type y;f[;y] peach x;(x f\:) peach y]}
 / (c)ode, (g)uess
 scr:{[c;g](e;count[c]-(e:"j"$sum c=g)+count c drop/ g)}
 score:veca scr
@@ -16,7 +16,7 @@ hist:freq asc@                  / histogram
 / compute the frequency distribution of x with (c)olumn names
 freqdist:{[c;x]([]x:u)!flip c!freq'[x]@\:u:asc (union/) x}
 / generate a frequency table
-freqt:{[C;G]`score xcol freqdist[`$G] score[C] peach G}
+freqt:{[C;G]`score xcol freqdist[`$G] score[C;G]}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
@@ -24,7 +24,7 @@ simple:{[CGgs]CG,1#last CG:filt . CGgs}
 / one step algos
 / use (f)unction to filter all unpicked (C)odes for best split
 / pick a solution from viable (G)uesses (if possible)
-best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f freq each score[C;G];G;C]}
+best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f (freq score[;G]::) peach C;G;C]}
 entropy:{neg sum x*log x%:sum x}
 gini:{1f-sum x*x%:sum x}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
