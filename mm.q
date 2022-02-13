@@ -45,4 +45,4 @@ turn:{[a;c;CGgs] CGg,enlist score[c]last CGg:a CGgs}
 game:{[a;C;G;g;c](not score[c;c]~last::) turn[a;c]\ (C;G;g;score[c;g])}
 
 / report
-summary:{[CGgs]`n`guess`score!(count CGgs 1),-2#CGgs}
+summary:{[CGgs]`n`guess`score!(count (inter/) 2#CGgs),-2#CGgs}
