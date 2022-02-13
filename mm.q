@@ -23,7 +23,7 @@ simple:{[CGgs]CG,1#last CG:filt . CGgs}
 / use (f)unction to filter all unpicked (C)odes for best split
 / pick a solution from viable (G)uesses (if possible)
 best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f freq each score[C;G];G;C]}
-entropy:{neg sum x*2 xlog x%:sum x}
+entropy:{neg sum x*log x%:sum x}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
 minimax:{x=min x:max each x}       / min max size (knuth)
 irving:{x=min x:{x wavg x} each x} / min expected size
