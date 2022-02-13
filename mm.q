@@ -10,8 +10,8 @@ score:veca scr
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
 filt:{[C;G;g;s](drop[C;g];G where s~/:score[G;g])}
 
-freq:count each group@          / frequency distribution
-hist:freq asc@                  / histogram
+freq:count each group::         / frequency distribution
+hist:freq asc::                 / histogram
 
 / compute the frequency distribution of x with (c)olumn names
 freqdist:{[c;x]([]x:u)!flip c!freq'[x]@\:u:asc (union/) x}
