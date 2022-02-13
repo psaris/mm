@@ -14,7 +14,7 @@ freq:count each group@          / frequency distribution
 hist:freq asc@                  / histogram
 
 / compute the frequency distribution of x with (c)olumn names
-freqdist:{[c;x]([]x:u)!flip c!freq'[x]@\:u:asc distinct raze x}
+freqdist:{[c;x]([]x:u)!flip c!freq'[x]@\:u:asc (union/) x}
 / generate a frequency table
 freqt:{[C;G]`score xcol freqdist[`$G] score[C] peach G}
 
