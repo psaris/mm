@@ -3,12 +3,12 @@
 drop:{x _ x ? y}
 / vectorize an atomic function
 veca:{[f;x;y]$[type x;$[type y;f[x;y];x f/: y];type y;x f\: y;x f/:\: y]}
-/ x,y = score,guess in any order
-scr:{(e;count[x]-(e:"j"$sum x=y)+count x drop/ y)}
+/ (c)ode, (g)uess
+scr:{[c;g](e;count[c]-(e:"j"$sum c=g)+count c drop/ g)}
 score:veca scr
 
 / unused (C)odes, viable (G)uesses, next (g)uess, (s)core
-filt:{[C;G;g;s](drop[C;g];G where s~/:score[g;G])}
+filt:{[C;G;g;s](drop[C;g];G where s~/:score[G;g])}
 
 freq:count each group@          / frequency distribution
 hist:freq asc@                  / histogram
