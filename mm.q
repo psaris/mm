@@ -15,6 +15,8 @@ hist:freq asc@                  / histogram
 
 / compute the frequency distribution of x with (c)olumn names
 freqdist:{[c;x]([]x:u)!flip c!freq'[x]@\:u:asc distinct raze x}
+/ generate a frequency table
+freqt:{[C;G]`score xcol freqdist[`$G] score[C] peach G}
 
 / algorithms
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
