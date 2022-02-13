@@ -1,6 +1,6 @@
 # A Q Implementation of the Classic Mastermind Game
 
-Clone this project and start q with the following command to see q
+Clone this project and start q with the following command to see a
 brief introduction to different solutions to the mastermind game.
 
 `q mastermind.q`
@@ -15,11 +15,11 @@ the variations can be found on the [mastermind wiki][variations].
 
 [variations]:https://en.wikipedia.org/wiki/Mastermind_(board_game)#Variations
 
-Our firs task, then, is to define the set of possible codes.  The
+Our first task, then, is to define the set of possible codes.  The
 `.mm.perm` function allows us generate permutations with (or without)
 repeat by passing a positive (or negative) parameter.
 
-```
+```q
 q)count C:`u#.mm.perm[4] "123456"
 1296
 ```
@@ -30,8 +30,8 @@ We can then choose an algorithm (say Knuth's minimax algorithm that is
 guaranteed to win in 5 moves) and an initial guess "1122", and we can
 see how the algorithm performs:
 
-```
-q)show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"1122"] rand C
+```q
+q)show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;C;"1122"] rand C
 n    guess  score
 -----------------
 1296 "1122" 1 0  
@@ -52,14 +52,15 @@ The list of possible algorithms are:
 - .mm.irving (minimum expected size)
 - .mm.maxent (maximum entropy)
 - .mm.maxparts (most parts)
+- .mm.maxgini (maximum gini coefficient)
 
 ## Interactive Play
 
 Alternatively, we can play the game interactively (passing in an
 algorithm so it can give us a hint at the best answer).
 
-```
-q)show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;"1122"] rand C
+```q
+q)show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;C;"1122"] rand C
 n    guess  score
 -----------------
 1296 "1122" 0 1  
@@ -94,14 +95,14 @@ took.
 To speed things up, we can convert the `.mm.score` function into a
 cache:
 
-```
+```q
 q).mm.score:C!C!/:C .mm.scr\:/: C
 ```
 
 We can then use `peach` to run the games in parallel:
 
-```
-q).mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) peach C
+```q
+q).mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;C;"1122"]::) peach C
 1| 1
 2| 6
 3| 62
