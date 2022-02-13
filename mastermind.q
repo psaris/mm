@@ -37,15 +37,15 @@ show T upsert (1 2#0N),value sum 0<T
 
 -1 "lets play a single game for each strategy";
 -1 "simple";
-show .mm.summary each .mm.game[.mm.simple;C;"1111"] rand C
+show .mm.summary each .mm.game[.mm.simple;C;C;"1111"] rand C
 -1 "minimax (knuth: always wins in 5 or less guesses)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;"1122"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;C;"1122"] rand C
 -1 "irving (min expectation)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;"1123"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;C;"1123"] rand C
 -1 "maximum entropy (information theoretic)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.maxent];C;"1234"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxent];C;C;"1234"] rand C
 -1 "maximum parts (the smallest expected number of guesses)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;C;"1123"] rand C
 
 -1 "master mind comes in other variations - including one with 8 colors";
 -1 "to narrow the universe of solutions, it does not allow repeats";
@@ -67,20 +67,20 @@ f . CG:(.mm.filt . CG)["AORB";2 2]
 f . CG:(.mm.filt . CG)["AROB";4 0]
 -1 "solution in 4 guesses!";
 -1 "replay the optimal game";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;"ABGO"] "AROB"
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;C;"ABGO"] "AROB"
 -1 "lets play a game against the computer!";
-show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;"ABGO"] rand C
+show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;C;"ABGO"] rand C
 
 \
 / convert .mm.score into a cache
-.mm.score:C!C!/:C .mm.scr\:/: C
+.mm.score:G!C!/:C .mm.scr\:/: G
 
 / generate a histogram of guess counts for each strategy
-.mm.hist a:(count .mm.game[.mm.simple;C;"1111"]@) peach C
-.mm.hist b:(count .mm.game[.mm.onestep[`.mm.minimax];C;"1122"]@) peach C
-.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;"1123"]@) peach C
-.mm.hist d:(count .mm.game[.mm.onestep[`.mm.maxent];C;"1234"]@) peach C
-.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;"1123"]@) peach C
+.mm.hist a:(count .mm.game[.mm.simple;C;C;"1111"]@) peach C
+.mm.hist b:(count .mm.game[.mm.onestep[`.mm.minimax];C;C;"1122"]@) peach C
+.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;C;"1123"]@) peach C
+.mm.hist d:(count .mm.game[.mm.onestep[`.mm.maxent];C;C;"1234"]@) peach C
+.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;C;"1123"]@) peach C
 show D:`turns xcol .mm.freqdist[`simple`minimax`irving`maxent`maxparts] (a;b;c;d;e)
 show ("f"$D) upsert 0N,value[flip value D] wavg\: key[D]`turns
 
@@ -90,8 +90,8 @@ CG:enlist[C],enlist G:10?C
 .mm.score:C!C!/:C .mm.scr\:/: C
 / all first guesses are the same
 show .mm.freqt[C;G]
-.mm.hist (count .mm.game[.mm.simple;C;"ABGO"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;"ABGO"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;"ABGO"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;"ABGO"]@) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.simple;C;C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;C;"ABGO"]@) peach C
