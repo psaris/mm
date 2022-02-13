@@ -26,10 +26,12 @@ simple:{[CGgs]CG,1#last CG:filt . CGgs}
 / pick a solution from viable (G)uesses (if possible)
 best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f freq each score[C;G];G;C]}
 entropy:{neg sum x*log x%:sum x}
+gini:{1f-sum x*x%:sum x}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
 minimax:{x=min x:max each x}       / min max size (knuth)
 irving:{x=min x:{x wavg x} each x} / min expected size
 maxent:{x=max x:entropy each x}    / max entropy
+maxgini:{x=max x:gini each x}      / max gini
 maxparts:{x=max x:count each x}    / most parts
 
 / interactive

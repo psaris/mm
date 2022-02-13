@@ -32,6 +32,8 @@ show asc max T
 show asc T wavg T
 -1 "or we can pick the code the maximizes the entropy: 1234"; / information theoretic
 show desc .mm.entropy each flip value T
+-1 "or we can pick the code the maximizes the gini coefficient: 1123";
+show desc .mm.gini each flip value T
 -1 "or why not pick a code that results in a distribution with the most parts: 1123";
 show desc sum 0<T
 
@@ -95,3 +97,4 @@ show .mm.freqt[C;G]
 .mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;C;"ABGO"]@) peach C
 .mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;C;"ABGO"]@) peach C
 .mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;C;"ABGO"]@) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxgini];C;C;"ABGO"]@) peach C
