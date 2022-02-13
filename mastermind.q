@@ -27,13 +27,13 @@ show flip (where;raze til each)@\: 5 4 3 1 1
 show T:.mm.freqt[C;G]
 -1 "we can start simple. pick the next logic code: 1111";
 -1 "or we can pick the code that minimizes the maximum remaining codes: 1122";
-show T upsert (1 2#0N),value max T
+show asc max T
 -1 "or we can pick the code that minimizes the expected remaining codes: 1123";
-show T upsert (1 2#0N),value "j"$T wavg T
+show asc T wavg T
 -1 "or we can pick the code the maximizes the entropy: 1234"; / information theoretic
-show T upsert (1 2#0N),value "j"$100*.mm.entropy each flip value T
+show desc .mm.entropy each flip value T
 -1 "or why not pick a code that results in a distribution with the most parts: 1123";
-show T upsert (1 2#0N),value sum 0<T
+show desc sum 0<T
 
 -1 "lets play a single game for each strategy";
 -1 "simple";
