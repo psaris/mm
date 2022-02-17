@@ -63,10 +63,10 @@ CG:(C;C)
 f:.mm.best[`.mm.maxparts]
 -1 "with no repeats, there is no 'best' first guess";
 -1 "we pick: ABGO, and pass the code maker's response";
-f . CG:(.mm.filt . CG)["ABGO";1 2]
-f . CG:(.mm.filt . CG)["AGBP";1 1]
-f . CG:(.mm.filt . CG)["AORB";2 2]
-f . CG:(.mm.filt . CG)["AROB";4 0]
+f . CG:.mm.filt . CG,("ABGO";1 2)
+f . CG:.mm.filt . CG,("AGBP";1 1)
+f . CG:.mm.filt . CG,("AORB";2 2)
+f . CG:.mm.filt . CG,("AROB";4 0)
 -1 "solution in 4 guesses!";
 -1 "replay the optimal game";
 show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;C;"ABGO"] "AROB"
