@@ -7,8 +7,8 @@ veca:{[f;x;y]$[type x;$[type y;f[x;y];f[x] peach y];type y;f[;y] peach x;(x f\:)
 scr:{[c;g](e;count[c]-(e:"j"$sum c=g)+count c drop/ g)}
 score:veca scr
 
-/ unused (C)odes, viable (G)uesses, next (g)uess, (s)core
-filt:{[C;G;g;s](drop[C;g];G where s~/:score[G;g])}
+/ viable (C)odes, unused (G)uesses, next (g)uess, (s)core
+filt:{[C;G;g;s](C where s~/:score[C;g];drop[G;g])}
 
 freq:count each group::         / frequency distribution
 hist:freq asc::                 / histogram
@@ -22,9 +22,9 @@ freqt:{[C;G]`score xcol freqdist[`$G] score[C;G]}
 simple:{[CGgs]CG,1#last CG:filt . CGgs}
 
 / one step algos
-/ use (f)unction to filter all unpicked (C)odes for best split
-/ pick a solution from viable (G)uesses (if possible)
-best:{[f;C;G]first $[3>count G;G;count G:G inter C@:where f (freq score[;G]::) peach C;G;C]}
+/ use (f)unction to analyze all unused (G)uesses for best distribution.
+/ pick from viable (C)odes (if possible)
+best:{[f;C;G]first $[3>count C;C;count C:C inter G@:where f freq each score[C;G];C;G]}
 entropy:{neg sum x*log x%:sum x}
 gini:{1f-sum x*x%:sum x}
 onestep:{[f;CGgs] CG,enlist best[f] . CG:filt . CGgs}
