@@ -24,7 +24,7 @@ show G:("1111";"1112";"1122";"1123";"1234")
 -1 "generate the list of unique scores";
 show flip (where;raze til each)@\: 5 4 3 1 1
 -1 "given the frequency distribution of first guesses, which should we pick?";
-show T:.mm.freqt[C;G]
+show T:.mm.freqt[G;C]
 -1 "we can start simple. pick the next logic code: 1111";
 -1 "or we can pick the code that minimizes the maximum remaining codes: 1122";
 show asc max T
@@ -40,15 +40,15 @@ show desc sum 0<T
 -1 "lets play a single game for each strategy";
 -1 "simple";
 G:C
-show .mm.summary each .mm.game[.mm.simple;C;G;"1111"] rand C
+show .mm.summary each .mm.game[.mm.simple;G;C;"1111"] rand C
 -1 "minimax (knuth: always wins in 5 or less guesses)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];C;G;"1122"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.minimax];G;C;"1122"] rand C
 -1 "irving (min expectation)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.irving];C;G;"1123"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.irving];G;C;"1123"] rand C
 -1 "maximum entropy (information theoretic)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.maxent];C;G;"1234"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxent];G;C;"1234"] rand C
 -1 "maximum parts (the smallest expected number of guesses)";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;G;"1123"] rand C
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];G;C;"1123"] rand C
 
 -1 "master mind comes in other variations - including one with 8 colors";
 -1 "to narrow the universe of solutions, it does not allow repeats";
@@ -58,43 +58,43 @@ show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;G;"1123"] rand C
 / grAy Blue Green Orange Pink Red White Yellow
 count C:G:.mm.perm[-4] "ABGOPRWY"  / 4x8 Codes (no repeat)
 -1 "now lets assume we don't know the code, but would like help on choosing codes";
--1 "we first generate 'CG': the list of unused Codes, and valid Guesses";
-CG:(C;G)
+-1 "we first generate 'GC': the list of valid Guesses and unused Codes";
+GC:(G;C)
 -1 "next we define our algorithm and use .mm.best to suggest the next code";
 f:.mm.best[`.mm.maxparts]
 -1 "with no repeats, there is no 'best' first guess";
 -1 "we pick: ABGO, and pass the code maker's response";
-f . CG:.mm.filt . CG,("ABGO";1 2)
-f . CG:.mm.filt . CG,("AGBP";1 1)
-f . CG:.mm.filt . CG,("AORB";2 2)
-f . CG:.mm.filt . CG,("AROB";4 0)
+f . GC:.mm.filt . GC,("ABGO";1 2)
+f . GC:.mm.filt . GC,("AGBP";1 1)
+f . GC:.mm.filt . GC,("AORB";2 2)
+f . GC:.mm.filt . GC,("AROB";4 0)
 -1 "solution in 4 guesses!";
 -1 "replay the optimal game";
-show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];C;G;"ABGO"] "AROB"
+show .mm.summary each .mm.game[.mm.onestep[`.mm.maxparts];G;C;"ABGO"] "AROB"
 -1 "lets play a game against the computer!";
-show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];C;G;"ABGO"] rand C
+show .mm.summary each .mm.game[.mm.stdin[.mm.onestep[`.mm.maxent]];G;C;"ABGO"] rand C
 
 \
 / convert .mm.score into a cache
-.mm.score:G!C!/:C .mm.scr\:/: G
+.mm.score:.mm.scr/:[;C!C] peach G!G
 
 / generate a histogram of guess counts for each strategy
-.mm.hist a:(count .mm.game[.mm.simple;C;G;"1111"]::) peach C
-.mm.hist b:(count .mm.game[.mm.onestep[`.mm.minimax];C;G;"1122"]::) peach C
-.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];C;G;"1123"]::) peach C
-.mm.hist d:(count .mm.game[.mm.onestep[`.mm.maxent];C;G;"1234"]::) peach C
-.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];C;G;"1123"]::) peach C
+.mm.hist a:(count .mm.game[.mm.simple;G;C;"1111"]::) peach C
+.mm.hist b:(count .mm.game[.mm.onestep[`.mm.minimax];G;C;"1122"]::) peach C
+.mm.hist c:(count .mm.game[.mm.onestep[`.mm.irving];G;C;"1123"]::) peach C
+.mm.hist d:(count .mm.game[.mm.onestep[`.mm.maxent];G;C;"1234"]::) peach C
+.mm.hist e:(count .mm.game[.mm.onestep[`.mm.maxparts];G;C;"1123"]::) peach C
 show D:`turns xcol .mm.freqdist[`simple`minimax`irving`maxent`maxparts] (a;b;c;d;e)
 show ("f"$D) upsert 0N,value[flip value D] wavg\: key[D]`turns
 
 
-count CG::`u#.mm.perm[-4] "ABGOPRWY"  / 4x8 Codes (no repeat)
-.mm.score:G!C!/:C .mm.scr\:/: G
+count C:G:`u#.mm.perm[-4] "ABGOPRWY"  / 4x8 Codes (no repeat)
+.mm.score:.mm.scr/:[;C!C] peach G!G
 / all first guesses are the same
-show .mm.freqt[C;G]
-.mm.hist (count .mm.game[.mm.simple;C;G;"ABGO"]::) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];C;G;"ABGO"]::) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];C;G;"ABGO"]::) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];C;G;"ABGO"]::) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];C;G;"ABGO"]::) peach C
-.mm.hist (count .mm.game[.mm.onestep[`.mm.maxgini];C;G;"ABGO"]::) peach C
+show .mm.freqt[G;C]
+.mm.hist (count .mm.game[.mm.simple;G;C;"ABGO"]::) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.minimax];G;C;"ABGO"]::) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.irving];G;C;"ABGO"]::) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxent];G;C;"ABGO"]::) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxparts];G;C;"ABGO"]::) peach C
+.mm.hist (count .mm.game[.mm.onestep[`.mm.maxgini];G;C;"ABGO"]::) peach C
