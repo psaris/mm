@@ -7,8 +7,14 @@ veca:{[f;x;y]$[type x;$[type y;f[x;y];f[x] peach y];type y;f[;y] peach x;f/:[;y]
 scr:{[g;c](e;count[c]-(e:"j"$sum c=g)+count c drop/ g)}
 score:veca scr
 
+/ remove (g)uess from unused (G)uesses
+filtG:{[G;g;s]drop[G;g]}
+
+/ keep (C)odes that have the same (s)core as (g)uess
+filtC:{[C;g;s]C where s~/:score[g;C]}
+
 / unused (G)uesses, viable (C)odes, next (g)uess, (s)core
-filt:{[G;C;g;s](drop[G;g];C where s~/:score[g;C])}
+filt:{[G;C;g;s](filtG[G;g;s];filtC[C;g;s])}
 
 freq:count each group::         / frequency distribution
 hist:freq asc::                 / histogram
