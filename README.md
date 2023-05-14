@@ -3,7 +3,9 @@
 Clone this project and start q with the following command to see a
 brief introduction to different solutions to the mastermind game.
 
-`q mastermind.q`
+```sh
+$ q mastermind.q
+```
 
 ## Code Selection
 
